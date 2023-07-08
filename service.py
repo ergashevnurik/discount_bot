@@ -3,6 +3,7 @@ import os
 from sqlalchemy import create_engine, Column, Integer, Boolean, String
 from sqlalchemy.orm import scoped_session, declarative_base, sessionmaker
 from sqlalchemy.exc import PendingRollbackError, IntegrityError
+from strings import *
 
 HOST = "localhost"
 PASSWORD = "postgres"
@@ -66,7 +67,7 @@ def select_user(user_id):
 def select_all_users():
     users = session.query(Subscriber).all()
     for user in users:
-        return user.name
+        return f'{lastName}: {user.lastName}\n{firstName}: {user.firstName}\n{phoneNumber}: {user.contact}\n-------'
 
 
 def broadcast(message):
