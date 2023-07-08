@@ -3,6 +3,7 @@ import logging
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import *
 from config import *
+from service import register_subscriber, select_user, select_all_users, broadcast
 from strings import *
 from states import *
 from keyboard import *
@@ -78,9 +79,39 @@ async def process_gender(message: types.Message, state: FSMContext):
             parse_mode=ParseMode.MARKDOWN,
         )
 
+        user = register_subscriber(message, data['contact'], data['first_name'], data['last_name'], data['birthday'], data['gender'])
+
+        if user:
+            await message.answer('You successfully signed in!')
+        else:
+            await message.answer('You have already signed in!')
     # Finish conversation
     await state.finish()
 
+
+@dp.message_handler(commands=['profile'])
+async def show_profile(message: types.Message):
+    user = select_user(message.from_user.id)
+
+    await message.answer(f"Your profile\n"
+                         f"Name: {user.name}\n"
+                         f"Username: @{user.username}\n"
+                         f"Admin: {'Yes' if user.admin else 'No'}")
+
+
+@dp.message_handler(commands='all_users')
+async def get_all_users(message: types.Message):
+    user = select_user(message.from_user.id)
+    if user.admin:
+        users = select_all_users()
+        await message.reply(f'Users list:\n{users}')
+    else:
+        await message.reply('You have not permission')
+
+
+@dp.message_handler(Text(startswith='broadcast', ignore_case=True))
+async def broadcast_message(message: types.Message):
+    await message.reply(broadcast(message.text))
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
