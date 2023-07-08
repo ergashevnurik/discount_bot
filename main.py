@@ -82,9 +82,9 @@ async def process_gender(message: types.Message, state: FSMContext):
         user = register_subscriber(message, data['contact'], data['first_name'], data['last_name'], data['birthday'], data['gender'])
 
         if user:
-            await message.answer('You successfully signed in!')
+            await message.answer(signedInSuccessfully)
         else:
-            await message.answer('You have already signed in!')
+            await message.answer(alreadySignedIn)
     # Finish conversation
     await state.finish()
 
@@ -93,10 +93,10 @@ async def process_gender(message: types.Message, state: FSMContext):
 async def show_profile(message: types.Message):
     user = select_user(message.from_user.id)
 
-    await message.answer(f"Your profile\n"
-                         f"Name: {user.name}\n"
-                         f"Username: @{user.username}\n"
-                         f"Admin: {'Yes' if user.admin else 'No'}")
+    await message.answer(f"{profile}\n"
+                         f"{lastName}: {user.lastName}\n{firstName}: {user.firstName}\n"
+                         f"{username}: @{user.username}\n"
+                         f"{admin}: {f'{yes}' if user.admin else f'{no}'}")
 
 
 @dp.message_handler(commands='all_users')
@@ -104,9 +104,9 @@ async def get_all_users(message: types.Message):
     user = select_user(message.from_user.id)
     if user.admin:
         users = select_all_users()
-        await message.reply(f'Users list:\n{users}')
+        await message.reply(f'{usersList}\n{users}')
     else:
-        await message.reply('You have not permission')
+        await message.reply(permission)
 
 
 @dp.message_handler(Text(startswith='broadcast', ignore_case=True))
