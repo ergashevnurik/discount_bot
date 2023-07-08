@@ -1,5 +1,8 @@
 import logging
+import os
+from random import *
 
+from qrcode import *
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import *
 from config import *
@@ -7,7 +10,6 @@ from service import register_subscriber, select_user, select_all_users, broadcas
 from strings import *
 from states import *
 from keyboard import *
-
 
 @dp.message_handler(commands=["start"])
 async def on_start(msg: types.Message):
@@ -90,6 +92,25 @@ async def process_gender(message: types.Message, state: FSMContext):
     # Finish conversation
     await state.finish()
 
+
+@dp.message_handler(Text(equals=card, ignore_case=True))
+async def show_card(msg: types.Message):
+    user = select_user(msg.from_user.id)
+    data = user.id
+    img = make(data)
+    file_name, path = await save_to_path(img)
+    with open(os.path.join(path, file_name), 'rb') as file:
+        await bot.send_photo(msg.chat.id, file, caption=f'{user.firstName} {user.lastName} {user.id}')
+
+async def save_to_path(yt):
+    path = './images'
+    if not os.path.exists(path):
+        os.makedirs(path)
+    file_name = str(randint(0, 100000)) + '.png'
+
+    yt.save(f'{path}/{file_name}')
+    logging.info(f'Started processing {file_name}')
+    return file_name, path
 
 @dp.message_handler(Text(equals=profile, ignore_case=True))
 async def show_profile(message: types.Message):
