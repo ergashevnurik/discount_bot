@@ -63,7 +63,7 @@ async def process_gender(message: types.Message, state: FSMContext):
         data['gender'] = message.text
 
         # Remove keyboard
-        markup = types.ReplyKeyboardRemove()
+        markup = ReplyKeyboardRemove()
 
         # And send message
         await bot.send_message(
@@ -85,6 +85,8 @@ async def process_gender(message: types.Message, state: FSMContext):
             await message.answer(signedInSuccessfully)
         else:
             await message.answer(alreadySignedIn)
+
+        await bot.send_message(chooseMenu, reply_markup=menu)
     # Finish conversation
     await state.finish()
 
