@@ -91,7 +91,7 @@ async def process_gender(message: types.Message, state: FSMContext):
     await state.finish()
 
 
-@dp.message_handler(commands=['profile'])
+@dp.message_handler(Text(equals=profile, ignore_case=True))
 async def show_profile(message: types.Message):
     user = select_user(message.from_user.id)
 
