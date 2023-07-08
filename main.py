@@ -6,7 +6,7 @@ from qrcode import *
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import *
 from config import *
-from service import register_subscriber, select_user, select_all_users, broadcast
+from service import register_subscriber, select_user, select_all_users, broadcast, select_purchases
 from strings import *
 from states import *
 from keyboard import *
@@ -101,6 +101,10 @@ async def show_card(msg: types.Message):
     file_name, path = await save_to_path(img)
     with open(os.path.join(path, file_name), 'rb') as file:
         await bot.send_photo(msg.chat.id, file, caption=f'{user.firstName} {user.lastName} {user.id}')
+
+@dp.message_handler(Text(equals=orders, ignore_case=True))
+async def show_purchases(msg: types.Message):
+    await bot.send_message(msg.from_user.id, select_purchases(msg.from_user.id))
 
 async def save_to_path(yt):
     path = './images'

@@ -1,6 +1,6 @@
 import psycopg2
 import os
-from sqlalchemy import create_engine, Column, Integer, Boolean, String
+from sqlalchemy import create_engine, Column, Integer, Boolean, String, ForeignKey
 from sqlalchemy.orm import scoped_session, declarative_base, sessionmaker
 from sqlalchemy.exc import PendingRollbackError, IntegrityError
 from strings import *
@@ -32,6 +32,16 @@ class Subscriber(Base):
 
     username = Column(String)
     admin = Column(Boolean, default=False)
+
+
+class Purchases(Base):
+    __tablename__ = 'purchase'
+
+    id = Column(Integer, primary_key=True)
+    assigned_subscriber = Column(Integer, ForeignKey("subscriber.id"))
+    quantity = Column(Integer)
+    total_sum = Column(Integer)
+    date = Column(String)
 
 
 Base.metadata.create_all(bind=engine)
@@ -74,3 +84,8 @@ def broadcast(message):
     users = session.query(Subscriber).all()
     for user in users:
         return f'Dear {user.name} there is news for you.\n{message.replace("broadcast", "🆘")}'
+
+def select_purchases(user_id):
+    purchases = session.query(Purchases).filter(Purchases.assigned_subscriber == user_id).all()
+    for purchase in purchases:
+        return f'Purchase number: {purchase.id}\nQuantity: {purchase.quantity}\nTotal Sum: {purchase.total_sum} UZS\nDate: {purchase.date}'
