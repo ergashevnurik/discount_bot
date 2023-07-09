@@ -7,7 +7,7 @@ from strings import *
 
 HOST = "localhost"
 PASSWORD = "postgres"
-DATABASE = "rasulovgi"
+DATABASE = "backup_rasulovgi_17_01_2023"
 
 host = HOST
 password = PASSWORD
@@ -25,8 +25,8 @@ class Subscriber(Base):
     id = Column(Integer, primary_key=True)
 
     contact = Column(String)
-    firstName = Column(String)
-    lastName = Column(String)
+    first = Column(String)
+    last = Column(String)
     birthday = Column(String)
     gender = Column(String)
 
@@ -47,14 +47,14 @@ class Purchases(Base):
 Base.metadata.create_all(bind=engine)
 
 
-def register_subscriber(message, contact, first_name, last_name, birthday, gender):
+def register_subscriber(message, contact, first, last, birthday, gender):
     username = message.from_user.username if message.from_user.username else None
     user = Subscriber(
         id=int(message.from_user.id),
         username=username,
         contact=contact,
-        firstName=first_name,
-        lastName=last_name,
+        first=first,
+        last=last,
         birthday=birthday,
         gender=gender
     )

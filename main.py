@@ -30,7 +30,7 @@ async def on_contact(msg: types.Message, state: FSMContext):
 @dp.message_handler(state=BotState.firstName)
 async def on_contact(msg: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        data['first_name'] = msg.text
+        data['first'] = msg.text
 
     await BotState.next()
     await msg.reply(whatIsYourLastName)
@@ -39,7 +39,7 @@ async def on_contact(msg: types.Message, state: FSMContext):
 @dp.message_handler(state=BotState.lastName)
 async def on_contact(msg: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        data['last_name'] = msg.text
+        data['last'] = msg.text
 
     await BotState.next()
     await msg.reply(whenIsYourBirthday)
@@ -71,7 +71,7 @@ async def process_gender(message: types.Message, state: FSMContext):
         await bot.send_message(
             message.chat.id,
             md.text(
-                md.text(hi, f", {md.bold(data['last_name'])} {md.bold(data['first_name'])}"),
+                md.text(hi, f", {md.bold(data['last'])} {md.bold(data['first'])}"),
                 md.text(birthday, md.code(data['birthday'])),
                 md.text(phoneNumber, md.code(data['contact'])),
                 md.text(gender, data['gender']),
@@ -81,7 +81,7 @@ async def process_gender(message: types.Message, state: FSMContext):
             parse_mode=ParseMode.MARKDOWN,
         )
 
-        user = register_subscriber(message, data['contact'], data['first_name'], data['last_name'], data['birthday'], data['gender'])
+        user = register_subscriber(message, data['contact'], data['first'], data['last'], data['birthday'], data['gender'])
 
         if user:
             await message.answer(signedInSuccessfully)
