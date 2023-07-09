@@ -98,30 +98,33 @@ async def show_card(msg: types.Message):
     user = select_user(msg.from_user.id)
     data = user.id
     img = make(data)
-    file_name, path = await save_to_path(img)
+    file_name, path = await save_to_path(img, user.first, user.last, user.id)
     with open(os.path.join(path, file_name), 'rb') as file:
-        await bot.send_photo(msg.chat.id, file, caption=f'{user.firstName} {user.lastName} {user.id}')
+        await bot.send_photo(msg.chat.id, file, caption=f'{user.first} {user.last} {user.id}')
+
 
 @dp.message_handler(Text(equals=orders, ignore_case=True))
 async def show_purchases(msg: types.Message):
     await bot.send_message(msg.from_user.id, select_purchases(msg.from_user.id))
 
-async def save_to_path(yt):
+
+async def save_to_path(yt, first_name, last_name, id):
     path = './images'
     if not os.path.exists(path):
         os.makedirs(path)
-    file_name = str(randint(0, 100000)) + '.png'
-
-    yt.save(f'{path}/{file_name}')
+    file_name = f'{first_name}_{last_name}_{id}' + '.png'
+    if not os.path.isfile(path):
+        yt.save(f'{path}/{file_name}')
     logging.info(f'Started processing {file_name}')
     return file_name, path
+
 
 @dp.message_handler(Text(equals=profile, ignore_case=True))
 async def show_profile(message: types.Message):
     user = select_user(message.from_user.id)
 
     await message.answer(f"{profile}\n"
-                         f"{lastName}: {user.lastName}\n{firstName}: {user.firstName}\n"
+                         f"{lastName}: {user.last}\n{firstName}: {user.first}\n"
                          f"{username}: @{user.username}\n"
                          f"{admin}: {f'{yes}' if user.admin else f'{no}'}")
 
