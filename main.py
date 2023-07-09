@@ -88,7 +88,7 @@ async def process_gender(message: types.Message, state: FSMContext):
         else:
             await message.answer(alreadySignedIn)
 
-        await bot.send_message(chooseMenu, reply_markup=menu)
+        await bot.send_message(message.from_user.id, chooseMenu, reply_markup=menu)
     # Finish conversation
     await state.finish()
 
