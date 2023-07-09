@@ -85,7 +85,11 @@ def broadcast(message):
     for user in users:
         return f'Dear {user.name} there is news for you.\n{message.replace("broadcast", "🆘")}'
 
+
 def select_purchases(user_id):
     purchases = session.query(Purchases).filter(Purchases.assigned_subscriber == user_id).all()
+    result = ''
     for purchase in purchases:
-        return f'Purchase number: {purchase.id}\nQuantity: {purchase.quantity}\nTotal Sum: {purchase.total_sum} UZS\nDate: {purchase.date}'
+        result += f'Purchase number: {purchase.id}\nQuantity: {purchase.quantity}\nTotal Sum: {purchase.total_sum} UZS\nDate: {purchase.date}\n---'
+    return result
+
