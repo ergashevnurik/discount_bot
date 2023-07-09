@@ -1,8 +1,8 @@
-import psycopg2
-import os
 from sqlalchemy import create_engine, Column, Integer, Boolean, String, ForeignKey
+from sqlalchemy import create_engine, Column, Integer, Boolean, String, ForeignKey
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import scoped_session, declarative_base, sessionmaker
-from sqlalchemy.exc import PendingRollbackError, IntegrityError
+
 from strings import *
 
 HOST = "localhost"
@@ -86,10 +86,14 @@ def return_all_users():
     return session.query(Subscriber).all()
 
 
-def broadcast(message):
-    users = session.query(Subscriber).all()
-    for user in users:
-        return f'Dear {user.last} {user.first} there is news for you.\n{message.replace("broadcast", "🆘")}'
+def broadcast(message, last_name, first_name, gender):
+    if gender == male:
+        return f'Дорогой {last_name} {first_name} есть новости для вас.\n{message.replace("broadcast", "🆘")}'
+    elif gender == female:
+        return f'Дорогая {last_name} {first_name} есть новости для вас.\n{message.replace("broadcast", "🆘")}'
+    else:
+        return f'Дорогой/ая {last_name} {first_name} есть новости для вас.\n{message.replace("broadcast", "🆘")}'
+
 
 
 def select_purchases(user_id):
@@ -97,9 +101,9 @@ def select_purchases(user_id):
     result = ''
 
     if len(purchases) == 0:
-        return f'The bag is empty'
+        return f'{emptyBag}'
     for purchase in purchases:
-        result += f'Purchase number: {purchase.id}\nQuantity: {purchase.quantity}\nTotal Sum: {purchase.total_sum} UZS\nDate: {purchase.date}\n---\n'
+        result += f'{purchaseNo}: {purchase.id}\n{quantity}: {purchase.quantity}\n{price}: {purchase.total_sum} UZS\n{date}: {purchase.date}\n---\n'
     return result
 
 
@@ -108,11 +112,11 @@ def select_loyalty(user_id):
     result = ''
 
     if len(purchases) == 0:
-        return f'Loyalty does not work if the bag is empty'
+        return f'{emptyBag}'
     total_sum = 0
     cash_back = 1
     for purchase in purchases:
         total_sum += purchase.total_sum
         cash_back = total_sum * 5 / 100
-    result += f'Loyalty program \n\nВсего куплено на сумму: {total_sum}\nБаланс кешбека: {cash_back}'
+    result += f'{loyalty} \n\n{totalSum}: {total_sum} UZS\n{cashBack}: {cash_back}'
     return result

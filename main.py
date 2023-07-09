@@ -154,7 +154,7 @@ async def get_all_users(message: types.Message):
 async def broadcast_message(message: types.Message):
     users = return_all_users()
     for user in users:
-        await bot.send_message(user.id, broadcast(message.text))
+        await bot.send_message(user.id, broadcast(message.text, user.last, user.first, user.gender))
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
