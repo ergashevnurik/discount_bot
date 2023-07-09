@@ -10,3 +10,6 @@ menu = ReplyKeyboardMarkup(resize_keyboard=True)\
     .row(KeyboardButton(orders), KeyboardButton(loyalty))\
     .row(KeyboardButton(card), KeyboardButton(profile))
 
+admin_menu = ReplyKeyboardMarkup(resize_keyboard=True)\
+    .row(KeyboardButton(orders), KeyboardButton(loyalty))\
+    .row(KeyboardButton(card), KeyboardButton(profile)).row(KeyboardButton(all_users))

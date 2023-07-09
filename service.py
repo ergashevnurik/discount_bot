@@ -76,9 +76,10 @@ def select_user(user_id):
 
 def select_all_users():
     users = session.query(Subscriber).all()
+    result = ''
     for user in users:
-        return f'{lastName}: {user.lastName}\n{firstName}: {user.firstName}\n{phoneNumber}: {user.contact}\n-------'
-
+        result += f'{lastName}: {user.last}\n{firstName}: {user.first}\n{phoneNumber}: {user.contact}\n-------\n'
+    return result
 
 def broadcast(message):
     users = session.query(Subscriber).all()

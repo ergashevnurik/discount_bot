@@ -88,7 +88,12 @@ async def process_gender(message: types.Message, state: FSMContext):
         else:
             await message.answer(alreadySignedIn)
 
-        await bot.send_message(message.from_user.id, chooseMenu, reply_markup=menu)
+        user = select_user(message.from_user.id)
+        if user.admin:
+            await bot.send_message(message.from_user.id, chooseMenu, reply_markup=admin_menu)
+        else:
+            await bot.send_message(message.from_user.id, chooseMenu, reply_markup=menu)
+
     # Finish conversation
     await state.finish()
 
@@ -134,7 +139,7 @@ async def show_profile(message: types.Message):
                          f"{admin}: {f'{yes}' if user.admin else f'{no}'}")
 
 
-@dp.message_handler(commands='all_users')
+@dp.message_handler(Text(equals=all_users, ignore_case=True))
 async def get_all_users(message: types.Message):
     user = select_user(message.from_user.id)
     if user.admin:
