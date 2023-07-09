@@ -6,7 +6,8 @@ from qrcode import *
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import *
 from config import *
-from service import register_subscriber, select_user, select_all_users, broadcast, select_purchases, select_loyalty
+from service import register_subscriber, select_user, select_all_users, broadcast, select_purchases, select_loyalty, \
+    return_all_users
 from strings import *
 from states import *
 from keyboard import *
@@ -151,7 +152,9 @@ async def get_all_users(message: types.Message):
 
 @dp.message_handler(Text(startswith='broadcast', ignore_case=True))
 async def broadcast_message(message: types.Message):
-    await message.reply(broadcast(message.text))
+    users = return_all_users()
+    for user in users:
+        await bot.send_message(user.id, broadcast(message.text))
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)

@@ -81,10 +81,15 @@ def select_all_users():
         result += f'{lastName}: {user.last}\n{firstName}: {user.first}\n{phoneNumber}: {user.contact}\n-------\n'
     return result
 
+
+def return_all_users():
+    return session.query(Subscriber).all()
+
+
 def broadcast(message):
     users = session.query(Subscriber).all()
     for user in users:
-        return f'Dear {user.name} there is news for you.\n{message.replace("broadcast", "🆘")}'
+        return f'Dear {user.last} {user.first} there is news for you.\n{message.replace("broadcast", "🆘")}'
 
 
 def select_purchases(user_id):
