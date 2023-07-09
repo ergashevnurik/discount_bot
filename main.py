@@ -6,7 +6,7 @@ from qrcode import *
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import *
 from config import *
-from service import register_subscriber, select_user, select_all_users, broadcast, select_purchases
+from service import register_subscriber, select_user, select_all_users, broadcast, select_purchases, select_loyalty
 from strings import *
 from states import *
 from keyboard import *
@@ -117,6 +117,11 @@ async def save_to_path(yt, first_name, last_name, id):
         yt.save(f'{path}/{file_name}')
     logging.info(f'Started processing {file_name}')
     return file_name, path
+
+
+@dp.message_handler(Text(equals=loyalty, ignore_case=True))
+async def show_loyalty(msg: types.Message):
+    await bot.send_message(msg.from_user.id, select_loyalty(msg.from_user.id))
 
 
 @dp.message_handler(Text(equals=profile, ignore_case=True))

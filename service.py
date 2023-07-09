@@ -96,3 +96,17 @@ def select_purchases(user_id):
         result += f'Purchase number: {purchase.id}\nQuantity: {purchase.quantity}\nTotal Sum: {purchase.total_sum} UZS\nDate: {purchase.date}\n---\n'
     return result
 
+
+def select_loyalty(user_id):
+    purchases = session.query(Purchases).filter(Purchases.assigned_subscriber == user_id).all()
+    result = ''
+
+    if len(purchases) == 0:
+        return f'Loyalty does not work if the bag is empty'
+    total_sum = 0
+    cash_back = 1
+    for purchase in purchases:
+        total_sum += purchase.total_sum
+        cash_back = total_sum * 5 / 100
+    result += f'Loyalty program \n\nВсего куплено на сумму: {total_sum}\nБаланс кешбека: {cash_back}'
+    return result
