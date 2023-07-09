@@ -89,7 +89,10 @@ def broadcast(message):
 def select_purchases(user_id):
     purchases = session.query(Purchases).filter(Purchases.assigned_subscriber == user_id).all()
     result = ''
+
+    if len(purchases) == 0:
+        return f'The bag is empty'
     for purchase in purchases:
-        result += f'Purchase number: {purchase.id}\nQuantity: {purchase.quantity}\nTotal Sum: {purchase.total_sum} UZS\nDate: {purchase.date}\n---'
+        result += f'Purchase number: {purchase.id}\nQuantity: {purchase.quantity}\nTotal Sum: {purchase.total_sum} UZS\nDate: {purchase.date}\n---\n'
     return result
 
