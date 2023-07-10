@@ -123,11 +123,11 @@ async def show_connect_card(msg: types.Message, state: FSMContext):
     card_details = return_card_details(str(msg.from_user.id))
 
     if card_details:
-        await msg.answer(f"Your card is registered as: {card_details.holder}\n{card_details.issued}\n{card_details.name}")
+        await msg.answer(f"🟧 Ваша карта зарегистрирована как:\n🔸 {card_details.holder}\n🔸 {card_details.issued}\n🔸 {card_details.name}")
         await state.finish()
     else:
         await ConnectCardState.cardNumber.set()
-        await bot.send_message(msg.from_user.id, "Please send card details")
+        await bot.send_message(msg.from_user.id, "✍ Пожалуйста, пришлите данные карты Номер карты, который состоит из 16 цифр.")
 
 
 @dp.message_handler(state=ConnectCardState.cardNumber)
@@ -136,7 +136,7 @@ async def process_card_number(msg: types.Message, state: FSMContext):
         data['holder'] = msg.text
 
     await ConnectCardState.next()
-    await msg.reply("Please send date of issue")
+    await msg.reply("📆 Пожалуйста, пришлите дату истечения срока действия")
 
 
 @dp.message_handler(state=ConnectCardState.cardDate)
@@ -145,7 +145,7 @@ async def process_issue_date(msg: types.Message, state: FSMContext):
         data['issued'] = msg.text
 
     await ConnectCardState.next()
-    await msg.reply("Please send card holder")
+    await msg.reply("📜 Пожалуйста, пришлите имя карты")
 
 
 @dp.message_handler(state=ConnectCardState.cardName)
@@ -157,10 +157,10 @@ async def process_card_name(msg: types.Message, state: FSMContext):
         await bot.send_message(
             msg.chat.id,
             md.text(
-                md.text("Your card has been added"),
-                md.text("Card number", md.code(data['holder'])),
-                md.text("Date of Issue", md.code(data['issued'])),
-                md.text("Card holder", data['name']),
+                md.text("🟧 Ваша карта добавлена"),
+                md.text("🔸 Номер карты", md.code(data['holder'])),
+                md.text("🔸 Дата истечения срока действия", md.code(data['issued'])),
+                md.text("🔸 Владелец карты", data['name']),
                 sep='\n',
             ),
             reply_markup=menu,
@@ -170,9 +170,9 @@ async def process_card_name(msg: types.Message, state: FSMContext):
         card = register_card_details(msg, data['holder'], data['issued'], data['name'])
 
         if card:
-            await msg.answer('Connected successfully')
+            await msg.answer('🟩 Подключено успешно')
         else:
-            await msg.answer('Already connected')
+            await msg.answer('➕ Уже подключено')
 
         await filterUser(msg)
 
