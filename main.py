@@ -7,7 +7,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import *
 from config import *
 from service import register_subscriber, select_user, select_all_users, broadcast, select_purchases, select_loyalty, \
-    return_all_users
+    return_all_users, register_card_details
 from strings import *
 from states import *
 from keyboard import *
@@ -89,14 +89,18 @@ async def process_gender(message: types.Message, state: FSMContext):
         else:
             await message.answer(alreadySignedIn)
 
-        user = select_user(message.from_user.id)
-        if user.admin:
-            await bot.send_message(message.from_user.id, chooseMenu, reply_markup=admin_menu)
-        else:
-            await bot.send_message(message.from_user.id, chooseMenu, reply_markup=menu)
+        await filterUser(message)
 
     # Finish conversation
     await state.finish()
+
+
+async def filterUser(message):
+    user = select_user(message.from_user.id)
+    if user.admin:
+        await bot.send_message(message.from_user.id, chooseMenu, reply_markup=admin_menu)
+    else:
+        await bot.send_message(message.from_user.id, chooseMenu, reply_markup=menu)
 
 
 @dp.message_handler(Text(equals=card, ignore_case=True))
@@ -156,6 +160,15 @@ async def process_card_name(msg: types.Message, state: FSMContext):
             reply_markup=menu,
             parse_mode=ParseMode.MARKDOWN,
         )
+
+        card = register_card_details(msg, data['holder'], data['issued'], data['name'])
+
+        if card:
+            await msg.answer('Connected successfully')
+        else:
+            await msg.answer('Already connected')
+
+        await filterUser(msg)
 
     await state.finish()
 

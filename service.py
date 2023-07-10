@@ -1,3 +1,5 @@
+import random
+
 from sqlalchemy import create_engine, Column, Integer, Boolean, String, ForeignKey
 from sqlalchemy import create_engine, Column, Integer, Boolean, String, ForeignKey
 from sqlalchemy.exc import IntegrityError
@@ -44,6 +46,16 @@ class Purchases(Base):
     date = Column(String)
 
 
+class CardDetails(Base):
+    __tablename__ = 'card'
+
+    id = Column(Integer, primary_key=True)
+    assigned_subscriber = Column(Integer, ForeignKey("subscriber.id"))
+    holder = Column(String)
+    issued = Column(String)
+    name = Column(String)
+
+
 Base.metadata.create_all(bind=engine)
 
 
@@ -60,6 +72,25 @@ def register_subscriber(message, contact, first, last, birthday, gender):
     )
 
     session.add(user)
+
+    try:
+        session.commit()
+        return True
+    except IntegrityError:
+        session.rollback()  # откатываем session.add(user)
+        return False
+
+
+def register_card_details(message, holder, issued, name):
+    card = CardDetails(
+        id=int(random.randint(0, 10000)),
+        assigned_subscriber = int(message.from_user.id),
+        holder = holder,
+        issued = issued,
+        name = name
+    )
+
+    session.add(card)
 
     try:
         session.commit()
