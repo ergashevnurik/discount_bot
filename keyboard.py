@@ -8,8 +8,8 @@ gender_btn = ReplyKeyboardMarkup(resize_keyboard=True, selective=True).row(Keybo
 
 menu = ReplyKeyboardMarkup(resize_keyboard=True)\
     .row(KeyboardButton(orders), KeyboardButton(loyalty))\
-    .row(KeyboardButton(card), KeyboardButton(profile))
+    .row(KeyboardButton(card), KeyboardButton(profile)).add(KeyboardButton(connect_card))
 
 admin_menu = ReplyKeyboardMarkup(resize_keyboard=True)\
     .row(KeyboardButton(orders), KeyboardButton(loyalty))\
-    .row(KeyboardButton(card), KeyboardButton(profile)).row(KeyboardButton(all_users))
+    .row(KeyboardButton(card), KeyboardButton(profile)).row(KeyboardButton(all_users), KeyboardButton(connect_card))
