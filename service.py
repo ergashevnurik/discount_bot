@@ -24,7 +24,7 @@ Base.query = session.query_property()
 class Subscriber(Base):
     __tablename__ = 'subscriber'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(String, primary_key=True)
 
     contact = Column(String)
     first = Column(String)
@@ -40,7 +40,7 @@ class Purchases(Base):
     __tablename__ = 'purchase'
 
     id = Column(Integer, primary_key=True)
-    assigned_subscriber = Column(Integer, ForeignKey("subscriber.id"))
+    assigned_subscriber = Column(String, ForeignKey("subscriber.id"))
     quantity = Column(Integer)
     total_sum = Column(Integer)
     date = Column(String)
@@ -49,8 +49,8 @@ class Purchases(Base):
 class CardDetails(Base):
     __tablename__ = 'card'
 
-    id = Column(Integer, primary_key=True)
-    assigned_subscriber = Column(Integer, ForeignKey("subscriber.id"))
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    assigned_subscriber = Column(String, ForeignKey("subscriber.id"))
     holder = Column(String)
     issued = Column(String)
     name = Column(String)
@@ -62,7 +62,7 @@ Base.metadata.create_all(bind=engine)
 def register_subscriber(message, contact, first, last, birthday, gender):
     username = message.from_user.username if message.from_user.username else None
     user = Subscriber(
-        id=int(message.from_user.id),
+        id=message.from_user.id,
         username=username,
         contact=contact,
         first=first,
@@ -82,15 +82,14 @@ def register_subscriber(message, contact, first, last, birthday, gender):
 
 
 def register_card_details(message, holder, issued, name):
-    card = CardDetails(
-        id=int(random.randint(0, 10000)),
-        assigned_subscriber = int(message.from_user.id),
-        holder = holder,
-        issued = issued,
-        name = name
+    card_details = CardDetails(
+        assigned_subscriber=message.from_user.id,
+        holder=holder,
+        issued=issued,
+        name=name
     )
 
-    session.add(card)
+    session.add(card_details)
 
     try:
         session.commit()
@@ -115,6 +114,10 @@ def select_all_users():
 
 def return_all_users():
     return session.query(Subscriber).all()
+
+
+def return_card_details(user_id):
+    return session.query(CardDetails).filter(CardDetails.assigned_subscriber == user_id).first()
 
 
 def broadcast(message, last_name, first_name, gender):

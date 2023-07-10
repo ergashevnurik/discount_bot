@@ -7,7 +7,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import *
 from config import *
 from service import register_subscriber, select_user, select_all_users, broadcast, select_purchases, select_loyalty, \
-    return_all_users, register_card_details
+    return_all_users, register_card_details, return_card_details
 from strings import *
 from states import *
 from keyboard import *
@@ -96,7 +96,7 @@ async def process_gender(message: types.Message, state: FSMContext):
 
 
 async def filterUser(message):
-    user = select_user(message.from_user.id)
+    user = select_user(str(message.from_user.id))
     if user.admin:
         await bot.send_message(message.from_user.id, chooseMenu, reply_markup=admin_menu)
     else:
@@ -105,7 +105,7 @@ async def filterUser(message):
 
 @dp.message_handler(Text(equals=card, ignore_case=True))
 async def show_card(msg: types.Message):
-    user = select_user(msg.from_user.id)
+    user = select_user(str(msg.from_user.id))
     data = user.id
     img = make(data)
     file_name, path = await save_to_path(img, user.first, user.last, user.id)
@@ -115,13 +115,19 @@ async def show_card(msg: types.Message):
 
 @dp.message_handler(Text(equals=orders, ignore_case=True))
 async def show_purchases(msg: types.Message):
-    await bot.send_message(msg.from_user.id, select_purchases(msg.from_user.id))
+    await bot.send_message(msg.from_user.id, select_purchases(str(msg.from_user.id)))
 
 
 @dp.message_handler(Text(equals=connect_card, ignore_case=True))
-async def show_connect_card(msg: types.Message):
-    await ConnectCardState.cardNumber.set()
-    await bot.send_message(msg.from_user.id, "Please send card details")
+async def show_connect_card(msg: types.Message, state: FSMContext):
+    card_details = return_card_details(str(msg.from_user.id))
+
+    if card_details:
+        await msg.answer(f"Your card is registered as: {card_details.holder}\n{card_details.issued}\n{card_details.name}")
+        await state.finish()
+    else:
+        await ConnectCardState.cardNumber.set()
+        await bot.send_message(msg.from_user.id, "Please send card details")
 
 
 @dp.message_handler(state=ConnectCardState.cardNumber)
@@ -186,12 +192,12 @@ async def save_to_path(yt, first_name, last_name, id):
 
 @dp.message_handler(Text(equals=loyalty, ignore_case=True))
 async def show_loyalty(msg: types.Message):
-    await bot.send_message(msg.from_user.id, select_loyalty(msg.from_user.id))
+    await bot.send_message(msg.from_user.id, select_loyalty(str(msg.from_user.id)))
 
 
 @dp.message_handler(Text(equals=profile, ignore_case=True))
 async def show_profile(message: types.Message):
-    user = select_user(message.from_user.id)
+    user = select_user(str(message.from_user.id))
 
     await message.answer(f"{profile}\n"
                          f"{lastName}: {user.last}\n{firstName}: {user.first}\n"
@@ -201,7 +207,7 @@ async def show_profile(message: types.Message):
 
 @dp.message_handler(Text(equals=all_users, ignore_case=True))
 async def get_all_users(message: types.Message):
-    user = select_user(message.from_user.id)
+    user = select_user(str(message.from_user.id))
     if user.admin:
         users = select_all_users()
         await message.reply(f'{usersList}\n{users}')
