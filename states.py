@@ -9,3 +9,8 @@ class BotState(StatesGroup):
     birthday = State()
     gender = State()
 
+
+class ConnectCardState(StatesGroup):
+    cardNumber = State()
+    cardDate = State()
+    cardName = State()

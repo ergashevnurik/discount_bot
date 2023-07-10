@@ -114,6 +114,52 @@ async def show_purchases(msg: types.Message):
     await bot.send_message(msg.from_user.id, select_purchases(msg.from_user.id))
 
 
+@dp.message_handler(Text(equals=connect_card, ignore_case=True))
+async def show_connect_card(msg: types.Message):
+    await ConnectCardState.cardNumber.set()
+    await bot.send_message(msg.from_user.id, "Please send card details")
+
+
+@dp.message_handler(state=ConnectCardState.cardNumber)
+async def process_card_number(msg: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['holder'] = msg.text
+
+    await ConnectCardState.next()
+    await msg.reply("Please send date of issue")
+
+
+@dp.message_handler(state=ConnectCardState.cardDate)
+async def process_issue_date(msg: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['issued'] = msg.text
+
+    await ConnectCardState.next()
+    await msg.reply("Please send card holder")
+
+
+@dp.message_handler(state=ConnectCardState.cardName)
+async def process_card_name(msg: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['name'] = msg.text
+
+        # And send message
+        await bot.send_message(
+            msg.chat.id,
+            md.text(
+                md.text("Your card has been added"),
+                md.text("Card number", md.code(data['holder'])),
+                md.text("Date of Issue", md.code(data['issued'])),
+                md.text("Card holder", data['name']),
+                sep='\n',
+            ),
+            reply_markup=menu,
+            parse_mode=ParseMode.MARKDOWN,
+        )
+
+    await state.finish()
+
+
 async def save_to_path(yt, first_name, last_name, id):
     path = './images'
     if not os.path.exists(path):
