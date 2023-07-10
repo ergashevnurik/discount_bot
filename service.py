@@ -34,6 +34,7 @@ class Subscriber(Base):
 
     username = Column(String)
     admin = Column(Boolean, default=False)
+    percentage = Column(String)
 
 
 class Purchases(Base):
@@ -149,8 +150,10 @@ def select_loyalty(user_id):
         return f'{emptyBag}'
     total_sum = 0
     cash_back = 1
+    subscriber = session.query(Subscriber).filter(Subscriber.id == user_id).first()
     for purchase in purchases:
         total_sum += purchase.total_sum
-        cash_back = total_sum * 5 / 100
+        if purchase.assigned_subscriber == subscriber.id:
+            cash_back = total_sum * int(subscriber.percentage) / 100
     result += f'{loyalty} \n\n{totalSum}: {total_sum} UZS\n{cashBack}: {cash_back}'
     return result
