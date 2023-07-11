@@ -68,21 +68,36 @@ async def process_gender(message: types.Message, state: FSMContext):
         # Remove keyboard
         markup = ReplyKeyboardRemove()
 
-        # And send message
-        await bot.send_message(
-            message.chat.id,
-            md.text(
-                md.text(hi, f", {md.bold(data['last'])} {md.bold(data['first'])}"),
-                md.text(birthday, md.code(data['birthday'])),
-                md.text(phoneNumber, md.code(data['contact'])),
-                md.text(gender, data['gender']),
-                sep='\n',
-            ),
-            reply_markup=markup,
-            parse_mode=ParseMode.MARKDOWN,
-        )
+    # Finish conversation
+    await BotState.next()
+    await message.reply("Please go verification fill the blank", reply_markup=markup)
+    await bot.send_document(message.from_user.id, open('blank.docx', 'rb'))
+    await message.reply_document("Please fill the blank and send it back by taking a photo")
 
-        user = register_subscriber(message, data['contact'], data['first'], data['last'], data['birthday'], data['gender'])
+
+@dp.message_handler(content_types=['photo'], state=BotState.verification)
+async def process_blank(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['blank'] = message.photo
+
+        user = select_user(str(message.from_user.id))
+        filename = f"{user.first}_{user.last}_{user.id}.jpg"
+        await message.photo[-1].download(filename)
+
+        with open(os.path.join(filename), 'rb') as file:
+            await bot.send_photo(
+                message.chat.id, file,
+                caption=md.text(
+                    md.text(hi, f", {md.bold(data['last'])} {md.bold(data['first'])}"),
+                    md.text(birthday, md.code(data['birthday'])),
+                    md.text(phoneNumber, md.code(data['contact'])),
+                    md.text(gender, data['gender']),
+                    sep='\n',
+                ),
+                parse_mode=ParseMode.MARKDOWN,
+            )
+
+        user = register_subscriber(message, data['contact'], data['first'], data['last'], data['birthday'],data['gender'])
 
         if user:
             await message.answer(signedInSuccessfully)
@@ -91,7 +106,6 @@ async def process_gender(message: types.Message, state: FSMContext):
 
         await filterUser(message)
 
-    # Finish conversation
     await state.finish()
 
 

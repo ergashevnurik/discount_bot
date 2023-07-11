@@ -8,6 +8,7 @@ class BotState(StatesGroup):
     lastName = State()
     birthday = State()
     gender = State()
+    verification = State()
 
 
 class ConnectCardState(StatesGroup):
