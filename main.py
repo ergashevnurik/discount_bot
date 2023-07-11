@@ -80,8 +80,7 @@ async def process_blank(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['blank'] = message.photo
 
-        user = select_user(str(message.from_user.id))
-        filename = f"{user.first}_{user.last}_{user.id}.jpg"
+        filename = f"{message.from_user.id}.jpg"
         await message.photo[-1].download(filename)
 
         with open(os.path.join(filename), 'rb') as file:
@@ -97,7 +96,7 @@ async def process_blank(message: types.Message, state: FSMContext):
                 parse_mode=ParseMode.MARKDOWN,
             )
 
-        user = register_subscriber(message, data['contact'], data['first'], data['last'], data['birthday'],data['gender'])
+        user = register_subscriber(message, data['contact'], data['first'], data['last'], data['birthday'],data['gender'], filename)
 
         if user:
             await message.answer(signedInSuccessfully)

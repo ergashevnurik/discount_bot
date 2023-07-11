@@ -35,6 +35,7 @@ class Subscriber(Base):
     username = Column(String)
     admin = Column(Boolean, default=False)
     percentage = Column(String)
+    uploaded = Column(String)
 
 
 class Purchases(Base):
@@ -60,7 +61,7 @@ class CardDetails(Base):
 Base.metadata.create_all(bind=engine)
 
 
-def register_subscriber(message, contact, first, last, birthday, gender):
+def register_subscriber(message, contact, first, last, birthday, gender, uploaded):
     username = message.from_user.username if message.from_user.username else None
     user = Subscriber(
         id=message.from_user.id,
@@ -69,7 +70,8 @@ def register_subscriber(message, contact, first, last, birthday, gender):
         first=first,
         last=last,
         birthday=birthday,
-        gender=gender
+        gender=gender,
+        uploaded=uploaded
     )
 
     session.add(user)
