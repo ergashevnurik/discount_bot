@@ -212,10 +212,16 @@ async def show_loyalty(msg: types.Message):
 async def show_profile(message: types.Message):
     user = select_user(str(message.from_user.id))
 
-    await message.answer(f"{profile}\n"
-                         f"{lastName}: {user.last}\n{firstName}: {user.first}\n"
-                         f"{username}: @{user.username}\n"
-                         f"{admin}: {f'{yes}' if user.admin else f'{no}'}")
+    with open(os.path.join(f'{message.from_user.id}.jpg'), 'rb') as file:
+        await bot.send_photo(
+            message.chat.id, file,
+            caption=md.text(
+                md.text(f'{profile}\n', f"{lastName}: {user.last}\n{firstName}: {user.first}"),
+                md.text(f'{admin}:', md.code(f"{f'{yes}' if user.admin else f'{no}'}")),
+                sep='\n',
+            ),
+            parse_mode=ParseMode.MARKDOWN,
+        )
 
 
 @dp.message_handler(Text(equals=all_users, ignore_case=True))
