@@ -70,9 +70,9 @@ async def process_gender(message: types.Message, state: FSMContext):
 
     # Finish conversation
     await BotState.next()
-    await message.reply("Please go verification fill the blank", reply_markup=markup)
-    await bot.send_document(message.from_user.id, open('blank.docx', 'rb'))
-    await message.reply_document("Please fill the blank and send it back by taking a photo")
+    await message.reply(fillTheBlank, reply_markup=markup)
+    await bot.send_document(message.from_user.id, open('анкета.docx', 'rb'))
+    await message.reply_document(sendBack)
 
 
 @dp.message_handler(content_types=['photo'], state=BotState.verification)
