@@ -34,6 +34,7 @@ class Subscriber(Base):
 
     username = Column(String)
     admin = Column(Boolean, default=False)
+    verified = Column(Boolean, default=False)
     percentage = Column(String)
     uploaded = Column(String)
 
@@ -85,14 +86,14 @@ def register_subscriber(message, contact, first, last, birthday, gender, uploade
 
 
 def register_card_details(message, holder, issued, name):
-    card_details = CardDetails(
+    card = CardDetails(
         assigned_subscriber=message.from_user.id,
         holder=holder,
         issued=issued,
         name=name
     )
 
-    session.add(card_details)
+    session.add(card)
 
     try:
         session.commit()
@@ -121,6 +122,10 @@ def return_all_users():
 
 def return_card_details(user_id):
     return session.query(CardDetails).filter(CardDetails.assigned_subscriber == user_id).first()
+
+
+def return_card_number(card_number):
+    return session.query(CardDetails).filter(CardDetails.holder == card_number).first()
 
 
 def broadcast(message, last_name, first_name, gender):

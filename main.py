@@ -7,7 +7,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import *
 from config import *
 from service import register_subscriber, select_user, select_all_users, broadcast, select_purchases, select_loyalty, \
-    return_all_users, register_card_details, return_card_details
+    return_all_users, register_card_details, return_card_details, return_card_number
 from strings import *
 from states import *
 from keyboard import *
@@ -217,7 +217,7 @@ async def show_profile(message: types.Message):
             message.chat.id, file,
             caption=md.text(
                 md.text(f'{profile}\n', f"{lastName}: {user.last}\n{firstName}: {user.first}"),
-                md.text(f'{admin}:', md.code(f"{f'{yes}' if user.admin else f'{no}'}")),
+                md.text(f'{verified}:', md.code(f"{f'{yes}' if user.verified else f'{no}'}")),
                 sep='\n',
             ),
             parse_mode=ParseMode.MARKDOWN,
