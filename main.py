@@ -24,55 +24,60 @@ async def on_contact(msg: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['contact'] = msg.contact.phone_number
 
-    await BotState.next()
-    await msg.reply(whatIsYourFirstName)
-
-
-@dp.message_handler(state=BotState.firstName)
-async def on_contact(msg: types.Message, state: FSMContext):
-    async with state.proxy() as data:
-        data['first'] = msg.text
-
-    await BotState.next()
-    await msg.reply(whatIsYourLastName)
-
-
-@dp.message_handler(state=BotState.lastName)
-async def on_contact(msg: types.Message, state: FSMContext):
-    async with state.proxy() as data:
-        data['last'] = msg.text
-
-    await BotState.next()
-    await msg.reply(whenIsYourBirthday)
-
-
-@dp.message_handler(state=BotState.birthday)
-async def on_contact(msg: types.Message, state: FSMContext):
-    async with state.proxy() as data:
-        data['birthday'] = msg.text
-
-    await BotState.next()
-    await msg.reply(chooseGender, reply_markup=gender_btn)
-
-
-@dp.message_handler(lambda message: message.text not in [male, female, other], state=BotState.gender)
-async def process_gender_invalid(message: types.Message):
-    return await message.reply(badGenderChosed)
-
-
-@dp.message_handler(state=BotState.gender)
-async def process_gender(message: types.Message, state: FSMContext):
-    async with state.proxy() as data:
-        data['gender'] = message.text
-
-        # Remove keyboard
         markup = ReplyKeyboardRemove()
 
-    # Finish conversation
+        # Finish conversation
     await BotState.next()
-    await message.reply(fillTheBlank, reply_markup=markup)
-    await bot.send_document(message.from_user.id, open('анкета.docx', 'rb'))
-    await message.reply_document(sendBack)
+    await msg.reply(fillTheBlank, reply_markup=markup)
+    await bot.send_document(msg.from_user.id, open('анкета.docx', 'rb'))
+    await msg.reply_document(sendBack)
+
+
+# @dp.message_handler(state=BotState.firstName)
+# async def on_contact(msg: types.Message, state: FSMContext):
+#     async with state.proxy() as data:
+#         data['first'] = msg.text
+#
+#     await BotState.next()
+#     await msg.reply(whatIsYourLastName)
+#
+#
+# @dp.message_handler(state=BotState.lastName)
+# async def on_contact(msg: types.Message, state: FSMContext):
+#     async with state.proxy() as data:
+#         data['last'] = msg.text
+#
+#     await BotState.next()
+#     await msg.reply(whenIsYourBirthday)
+#
+#
+# @dp.message_handler(state=BotState.birthday)
+# async def on_contact(msg: types.Message, state: FSMContext):
+#     async with state.proxy() as data:
+#         data['birthday'] = msg.text
+#
+#     await BotState.next()
+#     await msg.reply(chooseGender, reply_markup=gender_btn)
+#
+#
+# @dp.message_handler(lambda message: message.text not in [male, female, other], state=BotState.gender)
+# async def process_gender_invalid(message: types.Message):
+#     return await message.reply(badGenderChosed)
+#
+#
+# @dp.message_handler(state=BotState.gender)
+# async def process_gender(message: types.Message, state: FSMContext):
+#     async with state.proxy() as data:
+#         data['gender'] = message.text
+#
+#         # Remove keyboard
+#         markup = ReplyKeyboardRemove()
+#
+#     # Finish conversation
+#     await BotState.next()
+#     await message.reply(fillTheBlank, reply_markup=markup)
+#     await bot.send_document(message.from_user.id, open('анкета.docx', 'rb'))
+#     await message.reply_document(sendBack)
 
 
 @dp.message_handler(content_types=['photo'], state=BotState.verification)
@@ -87,16 +92,19 @@ async def process_blank(message: types.Message, state: FSMContext):
             await bot.send_photo(
                 message.chat.id, file,
                 caption=md.text(
-                    md.text(hi, f", {md.bold(data['last'])} {md.bold(data['first'])}"),
-                    md.text(birthday, md.code(data['birthday'])),
+                    md.text(hi, f'{message.from_user.last_name} {message.from_user.first_name}'),
                     md.text(phoneNumber, md.code(data['contact'])),
-                    md.text(gender, data['gender']),
+                    # md.text(hi, f", {md.bold(data['last'])} {md.bold(data['first'])}"),
+                    # md.text(birthday, md.code(data['birthday'])),
+                    # md.text(phoneNumber, md.code(data['contact'])),
+                    # md.text(gender, data['gender']),
                     sep='\n',
                 ),
                 parse_mode=ParseMode.MARKDOWN,
             )
 
-        user = register_subscriber(message, data['contact'], data['first'], data['last'], data['birthday'],data['gender'], filename)
+        # user = register_subscriber(message, data['contact'], data['first'], data['last'], data['birthday'],data['gender'], filename)
+        user = register_subscriber(message, data['contact'], message.from_user.first_name, message.from_user.last_name, filename)
 
         if user:
             await message.answer(signedInSuccessfully)

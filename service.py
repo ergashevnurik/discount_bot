@@ -62,7 +62,7 @@ class CardDetails(Base):
 Base.metadata.create_all(bind=engine)
 
 
-def register_subscriber(message, contact, first, last, birthday, gender, uploaded):
+def register_subscriber(message, contact, first, last, uploaded):
     username = message.from_user.username if message.from_user.username else None
     user = Subscriber(
         id=message.from_user.id,
@@ -70,8 +70,8 @@ def register_subscriber(message, contact, first, last, birthday, gender, uploade
         contact=contact,
         first=first,
         last=last,
-        birthday=birthday,
-        gender=gender,
+        birthday="N/A",
+        gender="N/A",
         uploaded=uploaded
     )
 
