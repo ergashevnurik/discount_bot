@@ -3,6 +3,7 @@ from aiogram.dispatcher.filters.state import *
 
 class BotState(StatesGroup):
     # chooseLanguage = State()
+    language = State()
     contact = State()
     # firstName = State()
     # lastName = State()

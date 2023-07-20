@@ -12,11 +12,20 @@ from strings import *
 from states import *
 from keyboard import *
 
+
 @dp.message_handler(commands=["start"])
 async def on_start(msg: types.Message):
-    await BotState.contact.set()
-    await bot.send_message(msg.from_user.id, greeting_text, reply_markup=send_contact)
+    await BotState.language.set()
+    await bot.send_message(msg.from_user.id, choose_language_text, reply_markup=choose_language)
     logging.basicConfig(level=logging.INFO)
+
+
+@dp.message_handler(state=BotState.language)
+async def on_language(msg: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['language'] = msg.text
+    await BotState.next()
+    await bot.send_message(msg.from_user.id, register_text, reply_markup=send_contact)
 
 
 @dp.message_handler(content_types=types.ContentType.CONTACT, state=BotState.contact)
@@ -94,6 +103,7 @@ async def process_blank(message: types.Message, state: FSMContext):
                 caption=md.text(
                     md.text(hi, f'{message.from_user.last_name} {message.from_user.first_name}'),
                     md.text(phoneNumber, md.code(data['contact'])),
+                    md.text(youChoice, md.code(data['language'])),
                     # md.text(hi, f", {md.bold(data['last'])} {md.bold(data['first'])}"),
                     # md.text(birthday, md.code(data['birthday'])),
                     # md.text(phoneNumber, md.code(data['contact'])),
@@ -104,7 +114,7 @@ async def process_blank(message: types.Message, state: FSMContext):
             )
 
         # user = register_subscriber(message, data['contact'], data['first'], data['last'], data['birthday'],data['gender'], filename)
-        user = register_subscriber(message, data['contact'], message.from_user.first_name, message.from_user.last_name, filename)
+        user = register_subscriber(message, data['contact'], message.from_user.first_name, message.from_user.last_name, filename, data['language'])
 
         if user:
             await message.answer(signedInSuccessfully)
