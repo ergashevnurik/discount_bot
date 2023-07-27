@@ -23,7 +23,11 @@ async def on_start(msg: types.Message):
 @dp.message_handler(state=BotState.language)
 async def on_language(msg: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        data['language'] = msg.text
+        if msg.text == uz:
+            data['language'] = 'uz'
+        elif msg.text == ru:
+            data['language'] = 'ru'
+
     await BotState.next()
     await bot.send_message(msg.from_user.id, register_text, reply_markup=send_contact)
 
