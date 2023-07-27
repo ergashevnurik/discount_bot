@@ -7,7 +7,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import *
 from config import *
 from service import register_subscriber, select_user, select_all_users, broadcast, select_purchases, select_loyalty, \
-    return_all_users, register_card_details, return_card_details, return_card_number
+    return_all_users, register_card_details, return_card_details, return_card_number, register_language
 from strings import *
 from states import *
 from keyboard import *
@@ -115,6 +115,7 @@ async def process_blank(message: types.Message, state: FSMContext):
 
         # user = register_subscriber(message, data['contact'], data['first'], data['last'], data['birthday'],data['gender'], filename)
         user = register_subscriber(message, data['contact'], message.from_user.first_name, message.from_user.last_name, filename, data['language'])
+        register_language(data['language'], message.from_user.id)
 
         if user:
             await message.answer(signedInSuccessfully)

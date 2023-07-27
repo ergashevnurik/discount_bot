@@ -61,6 +61,21 @@ class CardDetails(Base):
     name = Column(String)
 
 
+class Language(Base):
+    __tablename__ = 'language'
+
+    code = Column(String, primary_key=True)
+    assigned_subscriber = Column(String, ForeignKey("subscriber.id"))
+
+
+class LocalizationString(Base):
+    __tablename__ = 'localization'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    code = Column(String, ForeignKey("language.code"))
+    string = Column(String)
+
+
 Base.metadata.create_all(bind=engine)
 
 
@@ -103,6 +118,38 @@ def register_card_details(message, holder, issued, name):
         return True
     except IntegrityError:
         session.rollback()  # откатываем session.add(user)
+        return False
+
+
+def register_language(code, assigned_subscriber):
+    language = Language(
+        code=code,
+        assigned_subscriber=assigned_subscriber
+    )
+
+    session.add(language)
+
+    try:
+        session.commit()
+        return True
+    except IntegrityError:
+        session.rollback()
+        return False
+
+
+def register_string(code, string):
+    i18n = LocalizationString(
+        code=code,
+        string=string
+    )
+
+    session.add(i18n)
+
+    try:
+        session.commit()
+        return True
+    except IntegrityError:
+        session.rollback()
         return False
 
 
