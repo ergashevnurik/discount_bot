@@ -65,7 +65,7 @@ class Language(Base):
     __tablename__ = 'language'
 
     code = Column(String, primary_key=True)
-    assigned_subscriber = Column(String, ForeignKey("subscriber.id"))
+    # assigned_subscriber = Column(String, ForeignKey("subscriber.id"))
 
 
 class LocalizationString(Base):
