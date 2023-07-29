@@ -1,6 +1,3 @@
-import random
-
-from sqlalchemy import create_engine, Column, Integer, Boolean, String, ForeignKey
 from sqlalchemy import create_engine, Column, Integer, Boolean, String, ForeignKey
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import scoped_session, declarative_base, sessionmaker
@@ -121,10 +118,10 @@ def register_card_details(message, holder, issued, name):
         return False
 
 
-def register_language(code, assigned_subscriber):
+def register_language(code):
     language = Language(
         code=code,
-        assigned_subscriber=assigned_subscriber
+        # assigned_subscriber=assigned_subscriber
     )
 
     session.add(language)

@@ -119,7 +119,6 @@ async def process_blank(message: types.Message, state: FSMContext):
 
         # user = register_subscriber(message, data['contact'], data['first'], data['last'], data['birthday'],data['gender'], filename)
         user = register_subscriber(message, data['contact'], message.from_user.first_name, message.from_user.last_name, filename, data['language'])
-        register_language(data['language'], message.from_user.id)
 
         if user:
             await message.answer(signedInSuccessfully)
