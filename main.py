@@ -5,7 +5,10 @@ from random import *
 from qrcode import *
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import *
+
+import config
 from config import *
+from is_admin import IsAdmin
 from service import register_subscriber, select_user, select_all_users, broadcast, select_purchases, select_loyalty, \
     return_all_users, register_card_details, return_card_details, return_card_number, register_language
 from strings import *
@@ -116,6 +119,12 @@ async def process_blank(message: types.Message, state: FSMContext):
                 ),
                 parse_mode=ParseMode.MARKDOWN,
             )
+
+        with open(os.path.join(filename), 'rb') as file:
+            cid = message.chat.id
+            if cid not in config.ADMINS:
+                await bot.send_photo(config.ADMINS[0], file, caption=f"Please Check new user {message.from_user.username} {data['contact']} {message.from_user.first_name} {message.from_user.last_name}")
+
 
         # user = register_subscriber(message, data['contact'], data['first'], data['last'], data['birthday'],data['gender'], filename)
         user = register_subscriber(message, data['contact'], message.from_user.first_name, message.from_user.last_name, filename, data['language'])
