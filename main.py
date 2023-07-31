@@ -124,7 +124,8 @@ async def process_blank(message: types.Message, state: FSMContext):
             cid = message.chat.id
             user = select_user(str(message.from_user.id))
             if not user and cid not in config.ADMINS:
-                await bot.send_photo(config.ADMINS[0], file, caption=f"🟩Подтвердите нового пользователя:\nИмя пользователя: {message.from_user.username}\nКонтакт: {data['contact']}\nИмя: {message.from_user.first_name}\nФамилия: {message.from_user.last_name}")
+                verify_btn = InlineKeyboardMarkup().add(InlineKeyboardButton("🟩 Да, подтверждаю",callback_data=message.from_user.id), InlineKeyboardButton("🟥 Нет, неподтверждаю",callback_data=message.from_user.id))
+                await bot.send_photo(config.ADMINS[0], file, caption=f"🟩Подтвердите нового пользователя:\nИмя пользователя: {message.from_user.username}\nКонтакт: {data['contact']}\nИмя: {message.from_user.first_name}\nФамилия: {message.from_user.last_name}", reply_markup=verify_btn)
 
 
         # user = register_subscriber(message, data['contact'], data['first'], data['last'], data['birthday'],data['gender'], filename)
@@ -139,6 +140,8 @@ async def process_blank(message: types.Message, state: FSMContext):
 
     await state.finish()
 
+
+@dp.message_handler()
 
 async def filterUser(message):
     user = select_user(str(message.from_user.id))
