@@ -51,9 +51,8 @@ class Purchases(Base):
 class CardDetails(Base):
     __tablename__ = 'card'
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    holder = Column(String, primary_key=True)
     assigned_subscriber = Column(String, ForeignKey("subscriber.id"))
-    holder = Column(String)
     issued = Column(String)
     name = Column(String)
 

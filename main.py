@@ -197,7 +197,7 @@ async def process_issue_date(msg: types.Message, state: FSMContext):
 @dp.message_handler(state=ConnectCardState.cardName)
 async def process_card_name(msg: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        data['name'] = msg.text
+        data['card_name'] = msg.text
 
         # And send message
         await bot.send_message(
@@ -206,14 +206,14 @@ async def process_card_name(msg: types.Message, state: FSMContext):
                 md.text("🟧 Ваша карта добавлена"),
                 md.text("🔸 Номер карты", md.code(data['holder'])),
                 md.text("🔸 Дата истечения срока действия", md.code(data['issued'])),
-                md.text("🔸 Владелец карты", data['name']),
+                md.text("🔸 Владелец карты", data['card_name']),
                 sep='\n',
             ),
             reply_markup=menu,
             parse_mode=ParseMode.MARKDOWN,
         )
 
-        card_details = register_card_details(msg, data['holder'], data['issued'], data['name'])
+        card_details = register_card_details(msg, data['holder'], data['issued'], data['card_name'])
 
         if card_details:
             await msg.answer('🟩 Подключено успешно')
