@@ -141,8 +141,6 @@ async def process_blank(message: types.Message, state: FSMContext):
     await state.finish()
 
 
-@dp.message_handler()
-
 async def filterUser(message):
     user = select_user(str(message.from_user.id))
     if user.admin:
@@ -215,9 +213,9 @@ async def process_card_name(msg: types.Message, state: FSMContext):
             parse_mode=ParseMode.MARKDOWN,
         )
 
-        card = register_card_details(msg, data['holder'], data['issued'], data['name'])
+        card_details = register_card_details(msg, data['holder'], data['issued'], data['name'])
 
-        if card:
+        if card_details:
             await msg.answer('🟩 Подключено успешно')
         else:
             await msg.answer('➕ Уже подключено')

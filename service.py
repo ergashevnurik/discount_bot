@@ -101,14 +101,14 @@ def register_subscriber(message, contact, first, last, uploaded, language):
 
 
 def register_card_details(message, holder, issued, name):
-    card = CardDetails(
+    card_details = CardDetails(
         assigned_subscriber=message.from_user.id,
         holder=holder,
         issued=issued,
         name=name
     )
 
-    session.add(card)
+    session.add(card_details)
 
     try:
         session.commit()

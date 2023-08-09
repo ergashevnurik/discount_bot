@@ -1,7 +1,7 @@
 from aiogram import *
 from aiogram.contrib.fsm_storage.memory import *
 
-TOKEN = "6092971916:AAHDcmiEBR_49glpteQgI73EKt_fOcHVMsI"
+TOKEN = "5952448521:AAEKbvVJuPsvj_WJ1-L4YZ6eMCoX3d9-I3g"
 
 bot = Bot(token=TOKEN, parse_mode=types.ParseMode.HTML)
 storage = MemoryStorage()
