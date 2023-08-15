@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, Boolean, String, ForeignKey
+from sqlalchemy import create_engine, Column, Integer, Boolean, String, ForeignKey, sql
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import scoped_session, declarative_base, sessionmaker
 

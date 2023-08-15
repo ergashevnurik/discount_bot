@@ -1,0 +1,190 @@
+# Uzbek translations for PROJECT.
+# Copyright (C) 2023 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2023-08-15 15:45+0500\n"
+"PO-Revision-Date: 2023-08-15 15:18+0500\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: uz\n"
+"Language-Team: uz <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: keyboard.py:5
+msgid "🇷🇺Русский язык"
+msgstr "🇷🇺Русский язык"
+
+#: keyboard.py:5
+msgid "🇺🇿O'zbek tili"
+msgstr "🇺🇿O'zbek tili"
+
+#: keyboard.py:6
+msgid "📩 Отправить"
+msgstr "📩 Yuborish"
+
+#: keyboard.py:11 keyboard.py:15
+msgid "🛒 Мои покупки"
+msgstr "🛒 Mening xaridlarim"
+
+#: keyboard.py:11 keyboard.py:15
+msgid "👑 Программа лояльности"
+msgstr "👑 Sodiqlik dasturi"
+
+#: keyboard.py:12 keyboard.py:16
+msgid "💳 Моя карта"
+msgstr "💳 Mening kartam"
+
+#: keyboard.py:12 keyboard.py:16
+msgid "🔶 Ваш профиль"
+msgstr "🔶 Profilingiz"
+
+#: keyboard.py:12 keyboard.py:16
+msgid "➕ Подключить карту"
+msgstr "➕ Kartani ulash"
+
+#: keyboard.py:16
+msgid "📃 Список пользователей"
+msgstr "📃 Foydalanuvchilar roʻyxati"
+
+#: main.py:22
+msgid ""
+"🇷🇺Выберите язык\n"
+"🇺🇿Tilni tanlang"
+msgstr ""
+"🇷🇺Выберите язык\n"
+"🇺🇿Tilni tanlang"
+
+#: main.py:35
+msgid ""
+"✋ Добро пожаловать в Telegram Bot Rasulov GI 🚪\n"
+"            Пройдите регистрацию и следите за 🛒 своими покупками и 👑 "
+"программой лояльности прямо внутри бота.\n"
+"            Нажмите кнопку \"Отправить контакт 👤\" для регистрации 👇"
+msgstr ""
+"✋ Telegram Bot Rasulov GI ga xush kelibsiz 🚪\n"
+"Ro'yxatdan o'ting va xaridlaringizni 🛒 va 👑 kuzatib boringto'g'ridan-"
+"to'g'ri bot ichida sodiqlik dasturi bilan.\n"
+" Ro'yxatdan o'tish uchun \"Kontaktni yuborish 👤\" tugmasini bosing👇"
+
+#: main.py:49
+msgid "📃 Пожалуйста, пройдите проверку, заполните поле"
+msgstr "📃 Iltimos, tekshiruvdan o'ting, maydonni to'ldiring"
+
+#: main.py:51
+msgid "📩 Пожалуйста, заполните бланк и отправьте его обратно, сделав фото"
+msgstr "📩 Iltimos, anketani to'ldiring va surat bilan qaytarib yuboring"
+
+#: main.py:113
+msgid "🟧 Привет! Рад встрече"
+msgstr "🟧 Salom! Tanishganimdan xursandman"
+
+#: main.py:114
+msgid "🔶 Номер телефона"
+msgstr "🔶 Telefon raqami"
+
+#: main.py:115
+msgid "🟩 Твой выбор"
+msgstr "🟩 Sizning tanlovingiz"
+
+#: main.py:129
+msgid "🟩 Да, подтверждаю"
+msgstr "🟩 Ha, tasdiqlayman"
+
+#: main.py:129
+msgid "🟥 Нет, неподтверждаю"
+msgstr "🟥 Yo'q, tasdiqlamayman"
+
+#: main.py:130
+msgid ""
+"🟩Подтвердите нового пользователя:\n"
+"Имя пользователя: {username}\n"
+"Контакт: {contact}\n"
+"Имя: {firstName}\n"
+"Фамилия: {lastName}"
+msgstr ""
+"🩺Yangi foydalanuvchini tasdiqlang:\n"
+"Foydalanuvchi nomi: {username}\n"
+"Kontakt: {contact}\n"
+"Ism: {firstName}\n"
+"Familiya: {lastName}"
+
+#: main.py:137
+msgid "✅ Вы успешно вошли в систему!"
+msgstr "✅ Siz muvaffaqiyatli tizimga kirdingiz!"
+
+#: main.py:139
+msgid "☑ Вы уже вошли в систему!"
+msgstr "☑ Siz allaqachon tizimga kirgansiz!"
+
+#: main.py:149 main.py:151
+msgid "👆 Пожалуйста, выберите вариант из меню"
+msgstr "👆 Iltimos, menyudan variantni tanlang"
+
+#: main.py:174
+msgid ""
+"🟧 Ваша карта зарегистрирована как:\n"
+"🔸 {holder}\n"
+"🔸 {expired}\n"
+"🔸 {name}"
+msgstr ""
+"🟧 Sizning kartangiz ro'yxatdan o'tgan:\n"
+"🔸 {holder}\n"
+"🔸 {expired}\n"
+"🔸 {name}"
+
+#: main.py:178
+msgid ""
+"✍ Пожалуйста, пришлите данные карты Номер карты, который состоит из 16 "
+"цифр."
+msgstr ""
+"✍ Iltimos, karta ma'lumotlarini yuboring. Karta raqami 16 tadan "
+"iboratraqamlar."
+
+#: main.py:187
+msgid "📆 Пожалуйста, пришлите дату истечения срока действия"
+msgstr "📆 Iltimos, amal qilish muddatini yuboring"
+
+#: main.py:196
+msgid "📜 Пожалуйста, пришлите имя карты"
+msgstr "📜 Iltimos, karta nomini yuboring"
+
+#: main.py:208
+msgid "🟧 Ваша карта добавлена"
+msgstr "🟧 Sizning kartangiz qo'shildi"
+
+#: main.py:209
+msgid "🔸 Номер карты"
+msgstr "🔸 Karta raqami"
+
+#: main.py:210
+msgid "🔸 Дата истечения срока действия"
+msgstr "🔸 Yaroqlilik muddati"
+
+#: main.py:211
+msgid "🔸 Владелец карты"
+msgstr "🔸 Karta egasi"
+
+#: main.py:221
+msgid "🟩 Подключено успешно"
+msgstr "🟩 Muvaffaqiyatli ulandi"
+
+#: main.py:223
+msgid "➕ Уже подключено"
+msgstr "➕ Allaqachon ulangan"
+
+#: main.py:269
+msgid "🔶 У вас нет разрешения"
+msgstr "🔶 Sizda ruxsat yo'q"
+
+#: main.py:280
+msgid "Your current language: <i>{language}</i>"
+msgstr ""
+
